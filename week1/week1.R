@@ -120,14 +120,67 @@ with(airquality, {
     plot(Temp, Ozone, main="Ozone and Temperature")
     mtext("Ozone and Weather in New York City", outer=TRUE)
 })
-
-
-
-
-
-
-
-
-
-
-
+## Base Plotting Demonstration
+x <- rnorm(100)
+hist(x)
+y <- rnorm(100)
+plot(x, y)
+par(mar=c(4, 4, 2, 2))
+plot(x, y, pch=20)
+plot(x, y, pch=2)
+example(points)
+title("Scatterplot")
+text(-2, -2, "label")
+legend("topleft", legend="Data", pch=20)
+fit <- lm(y ~ x)
+abline(fit, lwd=3, col="blue")
+plot(x, y, xlab="Weight", ylab="Height", main="Scatterplot")
+legend("topright", legend="Data", pch=20)
+fit <- lm(y ~ x)
+abline(fit, lwd=3, col="red")
+z <- rpois(100, 2)
+par(mfrow=c(2, 1))
+plot(x, y, pch=20)
+plot(x, z, pch=19)
+par("mar")
+par(mar=c(2, 2, 1, 1))
+par(mfrow=c(2, 2))
+plot(x, y)
+plot(x, z)
+plot(z, x)
+plot(y, x)
+par(mfrow=c(1, 1))
+x <- rnorm(100)
+y <- x + rnorm(100)
+g <- gl(2, 50, labels=c("Male", "Female"))
+str(g)
+plot(x, y)
+plot(x, y, type="n") # no points
+points(x[g=="Male"], y[g=="Male"], col="green")
+points(x[g=="Female"], y[g=="Female"], col="blue", pch=19)
+## Graphics Devices in R
+# 1. screen device
+# 2. file device
+# 3. SVG
+# quartz() - Mac
+# plot(base), xyplot(lattice), qplot(ggplot2)
+library(datasets)
+pdf(file="myplot.pdf")
+with(faithful, plot(eruptions, waiting))
+title(main="Old Faithful Geyser data")
+dev.off()
+list.files()
+# Vector formats: pdf, svg(scalable vector graphics), 
+# win.metafile, postscript
+# Bitmap formats: png(line drawings, lossless compression), 
+# jpeg(lossy compression), tiff, bmp
+dev.cur() # returns an int
+dev.set(2)
+# Copying plots
+dev.copy
+dev.copy2pdf
+library(datasets)
+with(faithful, plot(eruptions, waiting))
+title(main="Old Faithful Geyser data")
+dev.copy(png, file="geyserplot.png")
+dev.off()
