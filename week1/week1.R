@@ -170,9 +170,9 @@ with(faithful, plot(eruptions, waiting))
 title(main="Old Faithful Geyser data")
 dev.off()
 list.files()
-# Vector formats: pdf, svg(scalable vector graphics), 
-# win.metafile, postscript
-# Bitmap formats: png(line drawings, lossless compression), 
+# Vector formats: pdf, svg(scalable vector graphics)
+#                 win.metafile, postscript
+# Bitmap formats: png(line drawings, lossless compression), GIF 
 # jpeg(lossy compression), tiff, bmp
 dev.cur() # returns an int
 dev.set(2)
