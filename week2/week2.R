@@ -1,3 +1,4 @@
+setwd("~/Desktop/Online Coursera/Coursera-Exploratory-Data-Analysis/week2")
 ## Lattice Plotting System
 # lattice: produce Trellis graphics, xyplot, bwplot, levelplot
 # grid: base of lattice
@@ -74,4 +75,55 @@ qplot(log(pm25), log(eno), data = maacs, geom = c("point", "smooth"),
 # Plot the data -> overlay the summary -> metadata and annotation
 qplot(logpm25, NocturnalSympt, data = maacs, facets = . ~ bmicat, 
       geom = c("point", "smooth"), method = "lm")
+head(maacs[, 1:3])
+
+g <- ggplot(maacs, aes(logpm25, NocturnalSympt))
+summary(g)
+print(g) # no layers in plot
+p <- g + geom_point()
+print(p)
+ 
+g + geom_point() # auto-print 
+## Adding more layers
+g + geom_point() + geom_smooth()
+g + geom_point() + geom_smooth(method = "lm")
+
+g + geom_point() + facet_grid(. ~ bmicat) + geom_smooth(method = "lm")
+# Annotation
+# xlab(), ylab(), labs(), ggtitle()
+# Modifying Aesthetics
+g + geom_point(color = "steelblue", size = 4,
+               alpha = 1 / 2) # sign a constant
+g + geom_point(aes(color = bmicat), size = 4, alpha = 1 / 2) # wrap the non-constant
+g + geom_point(aes(color = bmicat)) + labs(title = "MAACS Cohort") +
+    labs(x = expression("log " * PM[2.5]), y = "Nocturnal Symptoms")
+# labs() function for modifying titles and x- y- axis
+g + geom_point(aes(color = bmicat), size = 2, alpha = 1/2) +
+    geom_smooth(size = 4, linetype = 3, method = "lm", se = FALSE)
+# Changing the Theme
+g + geom_point(aes(color = bmicat)) + theme_bw(base_family = "Times")
+
+## A notes about axis limits
+testdat <- data.frame(x = 1:100, y = rnorm(100))
+testdat[50, 2] <- 100 ## Outlier
+plot(testdat$x, testdat$y, type = "l", ylim = c(-3, 3))
+g <- ggplot(testdat, aes(x = x, y = y))
+g + geom_line()
+g + geom_line() + ylim(-3, 3) # outlier missing
+g + geom_line() + coord_cartesian(ylim = c(-3, 3)) # outlier included
+
+# Making No2 Tertiles
+cutpoints <- quantile(maacs$logno2_new, seq(0, 1, length = 4), na.rm = T)
+maacs$no2dec <- cut(maacs$logno2_new, cutpoints)
+levels(maacs$no2dec)
+
+## Final plot
+g <- ggplot(maacs, aes(logpm25, NocturnalSympt))
+g + geom_point(alpha = 1/3)
+  + facet_wrap(bmicat ~ no2dec, nrow = 2, ncol = 4)
+  + geom_smooth(method = "lm", se = F, col = "steelblue")
+  + theme_bw(base_family = "Avenir", base_size = 10)
+  + labs(x = expression("log ") * PM[2.5])
+  + labs(y = "Nocturnal Symptoms")
+  + labs(title = "MAACS Cohort")
 
